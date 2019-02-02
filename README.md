@@ -1,68 +1,109 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+taxi app
+Вам предстоит самостоятельно написать приложение для заказа такси.
 
-## Available Scripts
+Пример приложения
 
-In the project directory, you can run:
+Логин: test@test.com Пароль: 123123
 
-### `npm start`
+Работа с сервером
+Для получения данных о маршруте и списка доступных адресов - вы можете использовать сервер.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Так же на сервере реализована простейшая система авторизации с захардкоженными данными.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Доступные запросы
+/auth - позволяет авторизоваться (test@test.com / 123123)
+/route - возвращает список точек для маршрута
+/addressList - возвращает список доступных адресов
+Более подробное описание на странице сервера.
 
-### `npm test`
+Для сервера использован сервис glitch, так что вы можете взять существующий сервис за основу, сделать его ремикс и улучшить на своё усмотрение. Например добавить регистрацию и хранение данных пользователя.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Работа с картой
+Для работы с картой предлагается использовать сервис mapbox. Он предоставляют библиотеку для Javascript, её довольно удобно использовать для отображения карты и маршрутов на ней.
 
-### `npm run build`
+Документация для Jаvascript библиотеки
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Для работы с картой вам потребуется зарегистрироваться на mapbox и получить токен.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Пример использования карты в приложении
+export default class Map extends Component {
+  map = null;
+  mapContainer = React.createRef();
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  componentDidMount() {
+    mapboxgl.accessToken = "ВАШ ТОКЕН С mapbox";
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v9",
+      center: [30.2656504, 59.8029126],
+      zoom: 15
+    });
+  }
 
-### `npm run eject`
+  componentWillUnmount() {
+    this.map.remove();
+  }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  render() {
+    return <div ref={this.mapContainer} />;
+  }
+}
+Так же вам потребуются методы map.flyTo и map.addLayer.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Работа со стилями
+Для реализации приложения предлагается использовать библиотеку компонентов.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Я рекомендую использовать Material UI. Именно эта библиотека была использована для демо.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Помимо неё есть множество других библиотек компонентов:
 
-## Learn More
+semantic-ui
+ant.design
+lihtning design
+grommet
+primer - библотека компонентов на базе дизайн системы гитхаба.
+purecss
+foundation
+clarity
+Задачи
+Необходимо реализовать приложение со следующим функционалом:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Как пользователь:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Я могу авторизоваться в приложении
+При неверном логине или пароле я получу ошибку валидации
+При попытке перейти на любую страницу кроме /login я буду перенаправлен обратно на страницу /login
+Как авторизованный пользователь:
 
-### Code Splitting
+Я имею доступ к странице с картой (/map)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+При незаполненных платёжных данных на странице карты я вижу сообщение о необходимости их заполнить и ссылку на профиль.
 
-### Analyzing the Bundle Size
+Я имею доступ к странице профиля (/profile)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+На странице профиля (/profile) я могу указать данные банковской карты
 
-### Making a Progressive Web App
+Поля cardName, cardNumber, expDate, cvv обязательны для заполнения
+Поле cardName может содержать только буквы латинского алфавита
+Поле cardNumber может содержать только цифры и должно иметь длину 8 символов.
+Поле expDat должно иметь формат даты
+Поле CVV может содержать только цифры. Состоит из 3 символов.
+Я получаю оповещение при успешном сохранении данных карты.
+Я могу выйти из аккаунта нажав кнопку "Выйти".
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Как авторизованный пользователь с указанными платёжными данными:
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+На странице с картой я могу выбрать адрес отправления и прибытия из списка доступных.
+При указанных адресах отправления и прибытия я могу нажать на кнопку "Выполнить заказ".
+Карта переместится к точке отправления.
+Будет построен маршрут от адреса отправления к адресу прибытия.
+Я получу сообщение об успешно выполненном заказе.
+Мне будет доступна кнопка выполнения нового заказа.
+Условия выполнения
+Необходимо реализовать приложение используя библиотеку ReactJS.
+Для управлением состоянием приложения должен быть использован Redux.
+Сайд-эффекты могут быть реализованы с помощью Redux Saga либо Redux Thunk, в крайнем случае с помощью middleware.
+Бонусные условия
+Код редьюсеров покрыт тестами.
+Сайд эффекты покрыты тестами.
+Если в компоненте есть логика - она протестирована.
