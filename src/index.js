@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-// import createStore from 
+import './index.css'; 
 import Router from './components/Router';
 import { Provider } from 'react-redux';
-// const store = createStore();
+import createAppStore from './store';
 
+const store = createAppStore();
 
 ReactDOM.render(
-    
-    <Router />, 
+ 
+    <Provider store={store}>
+        <Router />
+    </Provider>,
     document.getElementById('root')
   
 );
